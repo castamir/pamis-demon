@@ -1,17 +1,17 @@
 function DAres
 {
     param (
-        $job
+        $job,
+        $config
     )
 
     PROCESS {
         try
         {
             # todo test $job.ico exists
-            $xml = DAres_GetXml($job.ico)
+            $xml = DAres_GetXml($job.ico, $config)
             $aresData = DAres_ParseXml($xml)
             DAres_Print($aresData)
-#            $aresData.ICO
         }
         catch
         {
@@ -23,14 +23,19 @@ function DAres
 function DAres_GetXml
 {
     param (
-        [string]$ico
+        $ico,
+        $config
     )
-
 
     PROCESS {
         # tmp file name for encoding change purposes
         $tmpFileName = "$PSScriptRoot\tmp.xml"
         $URL = "https://wwwinfo.mfcr.cz/cgi-bin/ares/darv_std.cgi?ico=${ico}"
+        $enc = "Default"
+        if ($config.system.os -ne "windows")
+        {
+            $enc = "Windows-1252"
+        }
 
         try
         {
@@ -47,9 +52,9 @@ function DAres_GetXml
         }
 
         # change encoding via tmp file
-        $AresResponse.Content | Set-Content -Path $tmpFileName -Encoding "Windows-1252"
+        $AresResponse.Content | Set-Content -Path $tmpFileName -Encoding $enc
         $xmlContent = Get-Content -Path $tmpFileName
-        Remove-Item $tmpFileName
+        #        Remove-Item $tmpFileName
 
         # convert plain text to XML object
         $xml = New-Object -TypeName System.Xml.XmlDocument
