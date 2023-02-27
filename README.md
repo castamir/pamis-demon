@@ -26,3 +26,4 @@ typ=ares
 [parametry]
 ico=07318219
 ```
+Výstup úlohy ares je v souboru dst\ares.ini.
