@@ -37,6 +37,11 @@ function DAres_GetXml
         # tmp file name for encoding change purposes
         $tmpFileName = "$PSScriptRoot\tmp.xml"
         $URL = "https://wwwinfo.mfcr.cz/cgi-bin/ares/darv_std.cgi?ico=${ico}"
+        $enc = "Default"
+        if ($config.system.os -ne "windows")
+        {
+            $enc = "Windows-1252"
+        }
 
         try
         {
@@ -55,7 +60,7 @@ function DAres_GetXml
         # change encoding via tmp file
         $AresResponse.Content | Set-Content -Path $tmpFileName -Encoding $enc
         $xmlContent = Get-Content -Path $tmpFileName
-        Remove-Item $tmpFileName
+        #        Remove-Item $tmpFileName
 
         # convert plain text to XML object
         $xml = New-Object -TypeName System.Xml.XmlDocument
