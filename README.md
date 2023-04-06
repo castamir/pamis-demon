@@ -4,7 +4,7 @@
 
 Windows příkazová řádka.
 ```
-powershell.exe -File C:\cesta\k\pamis_demon\demon.ps1
+C:\cesta\k\pamis_demon\demon.bat
 ```
 
 ## Konfigurace úlohy
