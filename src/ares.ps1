@@ -8,10 +8,16 @@ function DAres
     PROCESS {
         try
         {
+            $enc = "Default"
+            if ($config.system.os -ne "windows")
+            {
+                $enc = "Windows-1252"
+            }
+
             # todo test $job.ico exists
-            $xml = DAres_GetXml($job.ico, $config)
-            $aresData = DAres_ParseXml($xml)
-            DAres_Print($aresData)
+            $xml = DAres_GetXml $job.ico $enc
+            $aresData = DAres_ParseXml $xml
+            DAres_Print $aresData
         }
         catch
         {
@@ -24,7 +30,7 @@ function DAres_GetXml
 {
     param (
         $ico,
-        $config
+        $enc
     )
 
     PROCESS {
